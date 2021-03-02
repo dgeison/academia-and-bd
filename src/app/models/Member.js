@@ -48,7 +48,7 @@ module.exports = {
   find(id, callback) {
     db.query(
       `
-    SELECT * 
+    SELECT *, instructor.name AS instructor_name
     FROM members 
     WHERE id = $1`,
       [id],
