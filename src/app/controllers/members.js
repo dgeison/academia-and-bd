@@ -2,7 +2,6 @@ const { age, date } = require("../../lib/utils");
 
 const Member = require("../models/Member");
 
-
 module.exports = {
   index(req, res) {
     Member.all(function (members) {
@@ -11,7 +10,9 @@ module.exports = {
   },
 
   create(req, res) {
-    return res.render("members/create");
+    Member.instructorsSelectOptions(function (options) {
+      return res.render("members/create", { instructorOptions: options });
+    });
   },
 
   post(req, res) {
@@ -45,7 +46,9 @@ module.exports = {
 
       member.birth = date(member.birth).iso;
 
-      return res.render("members/edit", { member });
+        Member.instructorsSelectOptions(function (options) {
+          return res.render("members/edit", { member, instructorOptions: options });
+        })
     });
   },
 
@@ -58,14 +61,14 @@ module.exports = {
       }
     }
 
-    Member.update(req.body, function(){
-      return res.redirect(`/members/${req.body.id}`)
-    })
+    Member.update(req.body, function () {
+      return res.redirect(`/members/${req.body.id}`);
+    });
   },
 
   delete(req, res) {
-    Member.delete(req.body.id, function(){
-      return res.redirect(`/members`)
-    })
+    Member.delete(req.body.id, function () {
+      return res.redirect(`/members`);
+    });
   },
 };
