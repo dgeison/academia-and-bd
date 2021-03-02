@@ -4,9 +4,18 @@ const Instructor = require("../models/Instructor");
 
 module.exports = {
   index(req, res) {
-    Instructor.all(function (instructors) {
-      return res.render("instructors/index", { instructors });
-    });
+    const { filter } = req.query;
+
+    if (filter) {
+      Instructor.findBy(filter, function(instructors){
+        return res.render("instructors/index", { instructors });
+        
+      })
+    } else {
+      Instructor.all(function (instructors) {
+        return res.render("instructors/index", { instructors });
+      });
+    }
   },
 
   create(req, res) {
@@ -61,14 +70,14 @@ module.exports = {
       }
     }
 
-    Instructor.update(req.body, function(){
-      return res.redirect(`/instructors/${req.body.id}`)
-    })
+    Instructor.update(req.body, function () {
+      return res.redirect(`/instructors/${req.body.id}`);
+    });
   },
 
   delete(req, res) {
-    Instructor.delete(req.body.id, function(){
-      return res.redirect(`/instructors`)
-    })
+    Instructor.delete(req.body.id, function () {
+      return res.redirect(`/instructors`);
+    });
   },
 };
